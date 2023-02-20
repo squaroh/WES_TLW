@@ -1,0 +1,18 @@
+  SOLVER CONTROL:
+	Turbulence Numerics = First Order ########################CM EDIT
+    ADVECTION SCHEME:
+      Option = High Resolution
+    END
+    CONVERGENCE CONTROL:
+#      Maximum Number of Iterations = $maxits ########################CM EDIT
+#      Maximum Number of Iterations = 3
+	   Maximum Number of Coefficient Loops = 5
+       Minimum Number of Coefficient Loops = 1
+       Timescale Control = Coefficient Loops
+#      Physical Timescale = ftscale(aitern)
+#      Timescale Control = Physical Timescale
+    END
+    CONVERGENCE CRITERIA:	########################CM EDIT
+#      Residual Target = $resid
+       Residual Target = 0.0001
+       Residual Type = RMS

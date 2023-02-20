@@ -1,0 +1,52 @@
+
+
+      zref = 0 [m]
+	  zinv = 2500 [m]
+      dzinv = 1500 [m]
+      Theta0 = 292 [K]
+      ThetaSea   = 286 [K]
+      dThetadz = $dThetadz [K/m]
+      dThetadzinv = (Theta0 - ThetaSea + dThetadz * zinv)/dzinv
+      ThetaRef = if(z<zref,Theta0,Theta0 +dThetadz * (z-zref))
+      ThetaIn = if(z<zinv-dzinv,ThetaSea, \
+                   if(z<zinv,ThetaSea + dThetadzinv*(z- (zinv-dzinv) ),\
+                                 Theta0 +dThetadz * (z-zref)))      
+      p0 = 1.013e5 [Pa]
+
+
+####################################################################################
+################# replacing Theta0 with ThetaSea##########
+####################################################################################
+! elsif ($params->exists('surface temperature offset'))
+! {
+        HEAT TRANSFER:
+          #Fixed Temperature = Theta0 + dTground 
+          Fixed Temperature = ThetaSea + dTground 	  
+          Option = Fixed Temperature
+        END
+! }
+
+  &replace SOLVER CONTROL:
+        Turbulence Numerics = First Order #################### edit
+    
+	ADVECTION SCHEME:
+      Option = High Resolution
+    END
+
+    CONVERGENCE CONTROL:
+      Maximum Number of Coefficient Loops = 5#################### edit
+      Minimum Number of Coefficient Loops = 1#################### edit
+      Timescale Control = Coefficient Loops
+    END
+	
+    CONVERGENCE CRITERIA:
+        Residual Target = 0.0001 #################### edit
+        Residual Type = RMS
+    END
+
+    TRANSIENT SCHEME:
+    Option = Second Order Backward Euler ################### edit
+    END
+  END
+END
+
