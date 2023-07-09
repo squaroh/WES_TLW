@@ -1,42 +1,20 @@
-# Skip if stability not included in model.
-! unless ($params->istrue('include stability'))
-! {
-!   goto wave_damping_END;
-! }
-
-# Maximum domain height  #in this case the domain height is 25km based on (Allaerts and Meyers 2017)
-! my $Hmax = $params->get_essential('height');#get Hmax from input file
-# Damping layer depth, default 40% of domain height - with domain height = 25km, 10km damping = 0.4
-! my $WDampV = 0.4*$Hmax;
-! if ($params->exists('damping layer depth'))
-! {
-!      $WDampV = $params->get('damping layer depth')
-! }
-
 LIBRARY:
   CEL:
     EXPRESSIONS:
     
       # Damping of vertical velocity in outer part of domain
       ###################################################### adding in the horizontal damping
-      RDamp = 20700 [m] #SJO RDamp is set to the radius of domain 
-      WDampH = 4800 [m] #SJO WDampH is the Damping at the outlet, 4.8 km based on (Allaerts and Meyers 2017)
+      RDamp = 20700 [m] # RDamp is set to the radius of domain 
+      WDampH = 4800 [m] # WDampH is the Damping at the outlet, 4.8 km based on (Allaerts and Meyers 2017)
       WDampV = $WDampV [m] #Vertical Wave Damping top 40% of domain height as above
 	RadXdir = sqrt(x^2) 
 	  
-      #SJO edits 09092019 including wave damping in y direction
+      #including wave damping in x, z directions
       DampingXdir = exp(-0.5* (3.5*(RadXdir-RDamp)/WDampH) ^2) [kg m^-3 s^-1]
 	  noDamp = 0 [kg m^-3 s^-1] # No damping for inlet adds dimensions to case without damping 
 	  Xpositive = 0[m] # accounts dimensions for values of x >0
 	  DampingX = if(x>Xpositive, DampingXdir, noDamp)#sets wavedamping for the outlet and no wave damping for the inlet
       DampingVert = exp(-0.5* (3.5*(z-Hmax)/WDampV) ^2) [kg m^-3 s^-1]   #sets vertical damping
-      Damping = DampingX + DampingVert   #
+      Damping = DampingX + DampingVert  
       
     END
-  END
-  ADDITIONAL VARIABLE: Damping Coefficient
-    Option = Definition
-    Tensor Type = SCALAR
-    Units = [kg m^-3 s^-1]
-    Variable Type = Unspecified
-  END
