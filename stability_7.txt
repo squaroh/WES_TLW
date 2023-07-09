@@ -27,25 +27,25 @@
 ! }
 
   &replace SOLVER CONTROL:
-        Turbulence Numerics = First Order #################### edit
+        Turbulence Numerics = First Order 
     
 	ADVECTION SCHEME:
       Option = High Resolution
     END
 
     CONVERGENCE CONTROL:
-      Maximum Number of Coefficient Loops = 5#################### edit
-      Minimum Number of Coefficient Loops = 1#################### edit
+      Maximum Number of Coefficient Loops = 5
+      Minimum Number of Coefficient Loops = 1
       Timescale Control = Coefficient Loops
     END
 	
     CONVERGENCE CRITERIA:
-        Residual Target = 0.0001 #################### edit
+        Residual Target = 0.0001 
         Residual Type = RMS
     END
 
     TRANSIENT SCHEME:
-    Option = Second Order Backward Euler ################### edit
+    Option = Second Order Backward Euler
     END
   END
 END
